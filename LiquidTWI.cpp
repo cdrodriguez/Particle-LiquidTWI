@@ -156,6 +156,11 @@ void LiquidTWI::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
         //  7   6   5   4   3   2   1   0
         // LT  D7  D6  D5  D4  EN  RS  n/c
         //-----
+        
+        //#define En B00000100  // Enable bit
+	//#define Rw B00000010  // Read/Write bit SCL - D5 on Uno
+	//#define Rs B00000001  // Register select bit SDA - D4	Uno
+        
         burstBits(B10011100); // send LITE D4 D5 high with enable
         burstBits(B10011000); // send LITE D4 D5 high with !enable
         burstBits(B10011100); //
