@@ -123,13 +123,13 @@ void LiquidTWI::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
 
 	// now we set the GPIO expander's I/O direction to output since it's soldered to an LCD output.
 	Wire.beginTransmission(MCP23008_ADDRESS | _i2cAddr);
-/*#if ARDUINO >= 100
+//#if ARDUINO >= 100
 	Wire.write((byte)MCP23008_IODIR);
 	Wire.write((byte)0x00); // all output: 00000000 for pins 1...8
-#else*/
+/*#else
 	Wire.send(MCP23008_IODIR);
 	Wire.send(0x00); // all output: 00000000 for pins 1...8
-//#endif
+#endif*/
 	Wire.endTransmission();
 
 	if (lines > 1) {
@@ -280,16 +280,16 @@ void LiquidTWI::createChar(uint8_t location, uint8_t charmap[]) {
 inline void LiquidTWI::command(uint8_t value) {
 	send(value, LOW);
 }
-#if ARDUINO >= 100
+//#if ARDUINO >= 100
 inline size_t LiquidTWI::write(uint8_t value) {
 	send(value, HIGH);
 	return 1;
 }
-#else
+/*#else
 inline void LiquidTWI::write(uint8_t value) {
 	send(value, HIGH);
 }
-#endif
+#endif*/
 /************ low level data pushing commands **********/
 
 // Allows to set the backlight, if the LCD backpack is used
@@ -331,12 +331,12 @@ void LiquidTWI::send(uint8_t value, uint8_t mode) {
 void LiquidTWI::burstBits(uint8_t value) {
 	// we use this to burst bits to the GPIO chip whenever we need to. avoids repetative code.
 	Wire.beginTransmission(MCP23008_ADDRESS | _i2cAddr);
-#if ARDUINO >= 100
+//#if ARDUINO >= 100
 	Wire.write(MCP23008_GPIO);
 	Wire.write(value); // last bits are crunched, we're done.
-#else
+/*#else
 	Wire.send(MCP23008_GPIO);
 	Wire.send(value); // last bits are crunched, we're done.
-#endif
+#endif*/
 	while (Wire.endTransmission()) ;
 }
