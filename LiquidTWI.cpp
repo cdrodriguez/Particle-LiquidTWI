@@ -45,15 +45,18 @@ If you have more than a 16x2 LCD, change "lcd.begin(16,2)" to reflect the
 columns and rows of your LCD.
 */
 
+#include "application.h"
 #include <stdio.h>
 #include <string.h>
 #include <inttypes.h>
-#include <Wire.h>
-#if ARDUINO >= 100
-  #include "Arduino.h"
-#else
-  #include "WProgram.h"
-#endif
+
+#define WIRE Wire
+ 
+//#if ARDUINO >= 100
+  //#include "Arduino.h"
+//#else
+ // #include "WProgram.h"
+//#endif
 
 // When the display powers up, it is configured as follows:
 //
@@ -91,7 +94,7 @@ void LiquidTWI::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
 	Wire.begin();
 	// first thing we do is get the GPIO expander's head working straight, with a boatload of junk data.
 	Wire.beginTransmission(MCP23008_ADDRESS | _i2cAddr);
-#if ARDUINO >= 100
+/*#if ARDUINO >= 100
 	Wire.write((byte)MCP23008_IODIR);
 	Wire.write((byte)0xFF);
 	Wire.write((byte)0x00);
@@ -103,7 +106,7 @@ void LiquidTWI::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
 	Wire.write((byte)0x00);
 	Wire.write((byte)0x00);
 	Wire.write((byte)0x00);
-#else
+#else*/
 	Wire.send(MCP23008_IODIR);
 	Wire.send(0xFF);
 	Wire.send(0x00);
@@ -115,18 +118,18 @@ void LiquidTWI::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
 	Wire.send(0x00);
 	Wire.send(0x00);
 	Wire.send(0x00);
-#endif
+//#endif
 	Wire.endTransmission();
 
 	// now we set the GPIO expander's I/O direction to output since it's soldered to an LCD output.
 	Wire.beginTransmission(MCP23008_ADDRESS | _i2cAddr);
-#if ARDUINO >= 100
+/*#if ARDUINO >= 100
 	Wire.write((byte)MCP23008_IODIR);
 	Wire.write((byte)0x00); // all output: 00000000 for pins 1...8
-#else
+#else*/
 	Wire.send(MCP23008_IODIR);
 	Wire.send(0x00); // all output: 00000000 for pins 1...8
-#endif
+//#endif
 	Wire.endTransmission();
 
 	if (lines > 1) {
